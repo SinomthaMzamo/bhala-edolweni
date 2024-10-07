@@ -55,7 +55,7 @@ function App() {
   }
 
   return (
-    <div style={{display:'flex', border: 'solid 2px yellow', padding: '0.9em'}} >
+    <div style={{display:'flex', border: 'solid 2px wheat', padding: '0.9em', background:'lightgray'}} >
       <Sidebar updateView={updateView}/>
       {renderSelectedMainContent()}
     </div>
