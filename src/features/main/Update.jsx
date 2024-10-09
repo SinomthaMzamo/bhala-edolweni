@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SingleIconTableRow from "./SingleIconTableRow.jsx";
-import debtors from "../../data/debtors.json";
+import debtors from "../../../backend/data/debtors.json";
 
 const Update = () => {
 

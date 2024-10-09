@@ -1,0 +1,14 @@
+[
+    {
+        "name": "John Does",
+        "amount": 1000
+    },
+    {
+        "name": "John Doe",
+        "amount": 1000
+    },
+    {
+        "name": "Alice",
+        "amount": 1500
+    }
+]
