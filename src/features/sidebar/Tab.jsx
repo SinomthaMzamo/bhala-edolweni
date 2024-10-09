@@ -7,7 +7,7 @@ const Tab = ({ icon, tabTitle, isCollapsed, handleViewChange}) => {
 
 
     return(
-        <button onClick={handleViewChange} style={{width:'100%', background:'pink', display:'flex', border:'solid 5px wheat', borderRadius:'12px'}}>
+        <button onClick={handleViewChange} style={{width:'100%', background:'palevioletred',color:'white', display:'flex', border:'solid 3px wheat', borderRadius:'12px'}}>
             <IconBox icon={icon}/>
             <h6>{tabTitle}</h6>
         </button>

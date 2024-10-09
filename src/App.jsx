@@ -55,9 +55,12 @@ function App() {
   }
 
   return (
-    <div style={{display:'flex', border: 'solid 2px wheat', padding: '0.9em', background:'lightgray'}} >
-      <Sidebar updateView={updateView}/>
-      {renderSelectedMainContent()}
+    <div className="">
+      <h1 className='dancing-script'>Bhala edolweni...</h1>
+      <div style={{display:'flex', border: 'solid 2px wheat', padding: '0.9em', background:'lightgray'}} >
+        <Sidebar updateView={updateView}/>
+        {renderSelectedMainContent()}
+      </div>
     </div>
   );
 }
