@@ -10,5 +10,29 @@
     {
         "name": "Alice",
         "amount": 1500
+    },
+    {
+        "name": "asante",
+        "amount": "150"
+    },
+    {
+        "name": "stha",
+        "amount": "170"
+    },
+    {
+        "name": "sa",
+        "amount": "170"
+    },
+    {
+        "name": "sma",
+        "amount": "170"
+    },
+    {
+        "name": "smha",
+        "amount": "170"
+    },
+    {
+        "name": "smhadza",
+        "amount": "170"
     }
 ]
