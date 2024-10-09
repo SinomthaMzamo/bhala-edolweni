@@ -6,6 +6,7 @@ import Counter from './features/counter/Counter'
 import Sidebar from './features/sidebar/SideBar'
 import View from './features/main/View'
 import Update from "./features/main/Update.jsx";
+import AddForm from './ui/AddForm.jsx';
 
 function App() {
   const [page, switchPage] = useState("");
@@ -26,19 +27,7 @@ function App() {
         return <View/>
       case 'add':
         // update main conttent to show "view all debtors page"
-        return <form style={{display: 'flex', flexDirection: 'column'}}>
-          <label htmlFor="debtorName">
-            Name:
-            <input id="debtorName" type="text"/>
-          </label>
-
-          <label htmlFor="amount">
-            Amount:
-            <input id="amount" type="text"/>
-          </label>
-
-          <button type="submit">submit</button>
-        </form>
+        return <AddForm/>
       case 'edit':
         // update main conttent to show "view all debtors page"
         return <Update/>
@@ -47,7 +36,7 @@ function App() {
         break;
     }
     return <form>
-      <label htmlFor="debtorName">{page}</label>
+      <label htmlFor="firstInput">{page}</label>
       <input id="firstInput" type="text"/>
       <button type="submit">submit</button>
     </form>

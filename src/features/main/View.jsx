@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Sidebar from "../sidebar/SideBar";
 import TableRow from "./TableRow";
+import SingleIconTableRow from "./SingleIconTableRow.jsx";
 import debtors from "../../../backend/data/debtors.json";
 
 const View = ({}) => {
@@ -26,7 +27,8 @@ const View = ({}) => {
     }, []);
     
     console.log(allDebtors);
-    const totalAmount = allDebtors.reduce((amount, debtor) => amount + debtor.amount, 0)
+    const totalAmount = allDebtors.reduce((amount, debtor) => amount + Number(debtor.amount), 0)
+    const icons = ["fas fa-pencil", "fas fa-trash", "fas fa-info"]
 
     return(
         <div>
@@ -45,11 +47,13 @@ const View = ({}) => {
                 </thead>
                 <tbody>
                     {allDebtors.map((debtor, index) => (
-                        <TableRow  
+                        <SingleIconTableRow  
+                        key={index}
                         num={index + 1} 
                         name={debtor.name} 
-                        amount={debtor.amount} 
+                        amount={Number(debtor.amount)} 
                         date={"17/05/24"}
+                        icons={icons}
                         />
                     ))}
                 </tbody>
