@@ -50,5 +50,21 @@
     {
         "name": "petey",
         "amount": "25"
+    },
+    {
+        "name": "groot",
+        "amount": "4"
+    },
+    {
+        "name": "gucci",
+        "amount": "22"
+    },
+    {
+        "name": "mpilo",
+        "amount": "127"
+    },
+    {
+        "name": "barbie",
+        "amount": "36"
     }
 ]
