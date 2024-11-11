@@ -32,7 +32,7 @@ def add_debtor():
     name = debtor.get('name')
     amount = debtor.get('amount')
 
-    response, status_code = debtors_service.add_debtor(name, amount)
+    response, status_code = debtors_service.add_debtor(name, int(amount))
     return jsonify(response), status_code 
 
 

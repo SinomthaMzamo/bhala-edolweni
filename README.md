@@ -79,14 +79,21 @@ debtor3-R8
    cd bhala-edolweni
    ```
 
+2. **Run the Python API:**
+   ```bash
+   cd backend
+   python dolo-api.py "Your Entry Here"
+   ```
+
 2. **Install dependencies for the React frontend:**
    ```bash
-   cd frontend
+   cd frontend/GUI
    npm install
    ```
 
 3. **Run the Python CLI:**
    ```bash
+   cd frontend/CLI/src
    python bhala.py "Your Entry Here"
    ```
 
@@ -95,7 +102,7 @@ debtor3-R8
    npm start
    ```
 
-5. **Open your browser** and navigate to `http://localhost:3000` to view the GUI.
+5. **Open your browser** and navigate to `http://localhost:5173` to view the GUI.
 
 ## Contributing
 
