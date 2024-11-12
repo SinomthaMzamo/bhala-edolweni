@@ -6,14 +6,18 @@
 
 - **Add Entries**: Users can add new debtor entries via the command line or GUI.
 - **View Entries**: The application allows users to read and view all existing entries.
+- **Update Entries**: The application allows users to update existing entries
+- **Delete Entries**: The application allows users to delete settled debtor accounts
 
 ## Current Functionality
 
 #### _Command-Line Interface Program_
 
 - **Add New Debtors**: Add new debtor entries through the command line using `bhala.py`.
-- **Store Debtor Information**: Saves entries to a text file (`edolweni.txt`).
-- **Read and Display**: Displays all debtor entries from the text file.
+- **Store Debtor Information**: Saves entries to a Relational database (`edolweni.db`).
+- **Read and Display**: Displays all debtor entries from the database.
+- **Update Entries**: The application allows users to update existing entries
+- **Delete Entries**: The application allows users to delete settled debtor accounts
 
 ## Usage Example:
 
@@ -25,25 +29,19 @@ python bhala.py "New Debtor Entry"
 
 **Example:**
 ```bash
-$ python bhala.py "debtor1-R8"
-$ python bhala.py "debtor2-R5"
-$ python bhala.py "debtor3-R8"
+$ python bhala.py "debtor1-8"
+$ python bhala.py "debtor2-5"
+$ python bhala.py "debtor3-8"
 ```
 
-**Contents** of `edolweni.txt`:
-```
-debtor1-R8
-debtor2-R5
-debtor3-R8
-```
-##
-#### _Graphical User Interface Program_
+
+## _Graphical User Interface Program_
 
 - **View All Debtors**: Displays a table of all debtors, including name, amount owed, and date.
 - **Add New Debtor**: A form for adding new debtor entries to the system.
-- **Store Debtor Information**: Saves entries in a JSON file (`debtors.json`).
+- **Store Debtor Information**: Saves entries in a Relational database (`edolweni.db`).
 
-## Usage:
+### Usage:
 
 - **Viewing Debtors**: Click on the "View All Debtors" tab to see the list of all debtors.
 - **Adding a New Debtor**: Select the "Add New Debtor" tab, fill in the debtor's name and amount, then submit the form.
@@ -53,16 +51,94 @@ debtor3-R8
 
 - **Kotlin CLI**: Transition the Python script to a Kotlin cli application.
 - **Kotlin RESTful API**: A backend will be developed to facilitate interaction with debtor data, allowing both the GUI and CLI to access the data seamlessly.
-- **Edit Existing Debtor**: Upcoming functionality to update debtor information, pending API implementation.
-- **Settle Debtor**: Future feature to settle debts and remove them from the database.
-- **Enhanced Data Management**: Transition to JSON for data storage and manipulation, improving backend and frontend integration.
+- **Edit Existing Debtor**: Upcoming functionality to update debtor information via GUI.
+- **Settle Debtor**: Future feature to settle debts and remove them from the database via GUI.
 
 ## Project Structure
 
-- **`bhala.py`**: Python script for managing debtor data via CLI.
-- **`edolweni.txt`**: Text file for storing debtor entries.
-- **`debtors.json`**: JSON file for storing debtor entries in the GUI.
-- **React Frontend**: Contains all frontend components and routing for the GUI.
+
+### File Breakdown 
+
+###  `backend/`
+
+1. **`app/`**  
+   This directory contains the core logic of the application. Each module is focused on a specific aspect of the application.
+
+   - **`data_models.py`**: Defines the data models for the application. These are used for interacting with the database, either via an ORM like SQLAlchemy or directly with SQL queries.
+   - **`__init__.py`**: Marks this folder as a Python package, enabling imports from the `app` module in other parts of the project.
+   - **`routes.py`**: Contains route definitions for the application (typically for Flask or FastAPI). This is where API endpoints are defined, and each route corresponds to a specific HTTP method (GET, POST, etc.).
+   - **`services.py`**: Implements the business logic of the application. It includes functions that interact with data models, perform calculations, handle third-party API calls, or process user input.
+   - **`service_tests.py`**: Includes tests for the service layer (in `services.py`). Unit tests or integration tests are written here to ensure the application logic behaves correctly.
+
+2. **`__init__.py` (Root Directory)**  
+   This is another initialization file, marking the root of the project as a Python package. This file is usually empty but required for certain imports or setups.
+
+3. **`instance/`**  
+   This folder contains configuration-specific files and runtime data. It's common to store the database or configuration files here, especially in a local or development environment.
+
+   - **`edolweni.db`**: This is the database file, SQLite in this case. It stores your application’s data (e.g., user information).
+
+4. **`main.py`**  
+   The entry point of the application. It typically initializes the web framework (like Flask), configures routes, and starts the development server. In many cases, this file will import from `app/routes.py` to link URL routes to the application logic.
+
+---
+
+### `frontend/`
+
+This directory contains the code for the frontend, which is divided into two parts: the React GUI and the Python CLI.
+
+#### `GUI/`: The React-based graphical user interface.
+
+- **`public/`**: Contains the public-facing files like `index.html`, images, and other static assets.
+- **`src/`**: Contains the source code for the React application.
+  - **`components/`**: Reusable React components that make up the UI.
+  - **`App.js`**: The main React component, which holds the layout and structure of the app.
+  - **`index.js`**: The entry point that renders the React app into the `index.html` file.
+  - **`api.js`**: Contains functions for making API requests to the backend (e.g., using `fetch` or `axios`).
+- **`package.json`**: Contains project metadata, dependencies, and scripts for the React app.
+- **`.gitignore`**: Specifies which files and directories Git should ignore (e.g., `node_modules/`, `.env`).
+
+#### `CLI/`: A Python-based CLI (Command-Line Interface) for interacting with the application.
+
+- **`src/`**: Contains the source code for the Python CLI application.
+  - **`bhala.py`**: The main script for the CLI application, which includes functionality to manage debtors via an interactive command-line interface.
+
+### Code Breakdown:
+
+1. **API Integration**: The script interacts with a backend API (located at `http://127.0.0.1:5000`) to perform various debtor-related operations such as adding, viewing, updating, and deleting debtors.
+
+   - **`add_debtor(name, amount)`**: Sends a POST request to add a new debtor with a specified name and amount.
+   - **`view_all_debtors()`**: Sends a GET request to fetch and display all debtors along with their balances.
+   - **`view_debtor(name)`**: Sends a GET request to view a specific debtor by their name.
+   - **`update_debtor(name, amount, operation)`**: Sends a PUT request to update a debtor's balance (either increasing, decreasing, or setting a specific amount).
+   - **`delete_debtor(name)`**: Sends a DELETE request to remove a debtor from the system.
+
+2. **CLI Command Class (`EdolweniCLI`)**: The class inherits from Python's `cmd.Cmd` to provide an interactive command-line interface for managing debtors.
+
+   - **Aliases**: Commands like `add`, `list`, `reduce`, `increase`, `set`, and `delete` have multiple aliases to allow flexibility in user input.
+   - **Command Methods**:
+     - **`do_add(self, arg)`**: Adds a debtor by parsing the name and amount from the argument.
+     - **`do_list(self, arg)`**: Lists all debtors or views a specific debtor by name.
+     - **`do_reduce(self, arg)`**: Reduces a debtor's balance.
+     - **`do_increase(self, arg)`**: Increases a debtor's balance.
+     - **`do_set(self, arg)`**: Sets a debtor's balance to a specific amount (overrides the current balance).
+     - **`do_delete(self, arg)`**: Deletes a debtor from the system.
+     - **`do_exit(self, arg)`**: Exits the CLI program.
+   
+   - **Command Aliases**: The `aliases` dictionary maps various alternate commands to their main functions, such as `+` for `add`, `--` for `reduce`, and `ls` for `list`.
+   
+3. **Error Handling**: The script handles errors gracefully, including issues with JSON decoding from the API response, invalid amounts, and missing arguments.
+
+4. **Main Entry Point**:
+   - When executed with arguments, the script will attempt to add a debtor and view all debtors. If the user wants to run the CLI interactively, they can type "run" when prompted.
+
+### Example Usage:
+
+1. **Add a Debtor**:
+   ```bash
+   (bhala-edolweni) add sinomtha mzamo-12
+   
+___
 
 ## Getting Started
 
@@ -78,31 +154,39 @@ debtor3-R8
    git clone <repository-url>
    cd bhala-edolweni
    ```
-
-2. **Run the Python API:**
+   
+2. **Install Python dependencies for backend via requirements file**
    ```bash
-   cd backend
-   python dolo-api.py "Your Entry Here"
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
    ```
 
-2. **Install dependencies for the React frontend:**
+3. **Run the Python API:**
+   ```bash
+   cd backend
+   python main.py 
+   ```
+
+4. **Install dependencies for the React frontend:**
    ```bash
    cd frontend/GUI
    npm install
+   
    ```
 
-3. **Run the Python CLI:**
+5. **Run the Python CLI:**
    ```bash
    cd frontend/CLI/src
    python bhala.py "Your Entry Here"
    ```
 
-4. **Start the React application:**
+6. **Start the React application:**
    ```bash
-   npm start
+   npm run dev
    ```
 
-5. **Open your browser** and navigate to `http://localhost:5173` to view the GUI.
+7. **Open your browser** and navigate to `http://localhost:5173` to view the GUI.
 
 ## Contributing
 
