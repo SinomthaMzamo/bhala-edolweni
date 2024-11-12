@@ -1,10 +1,17 @@
 from .data_models import Debtor, db
 
+
 class DebtorsManagementService:
     """
         Service class for managing debtors in the system's database.
         Provides methods to view, add, update, and delete debtor records.
     """
+
+    def reduce_debtor_amount(self, decrement, balance):
+        return balance - decrement
+
+    def increase_debtor_amount(self, increment, balance):
+        return balance + increment
 
     def view_debtor(self, name):
         """
@@ -66,7 +73,7 @@ class DebtorsManagementService:
 
         return {"message": f"Debtor '{name}' added successfully", "data": {"name": name, "amount": amount}}, 201
 
-    def update_debtor(self, name, amount):
+    def update_debtor(self, name, amount, operation):
         """
             Add a new debtor to the system.
 
@@ -81,12 +88,12 @@ class DebtorsManagementService:
         requested_debtor = Debtor.query.filter_by(name=name).first()
         if not requested_debtor:
             return {"message": "Debtor not found!"}, 404
-
-        requested_debtor.amount = amount
+        final_balance = self.apply_update_operation(operation, requested_debtor, amount)
+        requested_debtor.amount = final_balance
         db.session.commit()
 
         return {"message": f"Debtor {requested_debtor.name} updated successfully",
-         "data": {"name": requested_debtor.name, "amount": requested_debtor.amount}}, 200
+                "data": {"name": requested_debtor.name, "amount": requested_debtor.amount}}, 201
 
     def delete_debtor(self, name):
         """
@@ -105,7 +112,8 @@ class DebtorsManagementService:
 
         # check if debtor balance is settled
         if requested_debtor.amount:
-            return {"message": f"Unable to delete debtor {name.capitalize()} with outstanding balance of R{requested_debtor.amount}. The balance amount should be zero (R0) to remove the account."}, 422
+            return {
+                "error": f"Unable to delete debtor {name.capitalize()} with outstanding balance of R{requested_debtor.amount}. The balance amount should be zero (R0) to remove the account."}, 422
 
         # and remove debtor
         db.session.delete(requested_debtor)
@@ -114,7 +122,11 @@ class DebtorsManagementService:
         # generate and return appropriate response
         return {"message": f"Debtor '{name}' removed successfully."}, 200
 
+    def apply_update_operation(self, operation, debtor, value):
+        amount = debtor.amount
 
-    def response_builder(self, kind, code):
-        # avoid dry by implementing a response factory
-        pass
+        if operation == 'set':
+            return value
+
+        value = -1 * value if operation == 'reduce' else value
+        return amount + value

@@ -22,20 +22,24 @@ def view_debtor(name):
 # route to update specified debtor amount from json request body
 @endpoints.route('/update', methods=['PUT'])
 def update_debtor():
-    new_data = request.json
-    name = new_data.get('name')
-    new_amount = new_data.get('amount')
 
-    if not name or not new_amount:
-        return {"error": "Both 'name' and 'amount' are required."}, 400
+    debtor = request.json
+    name = debtor.get('name')
+    amount = debtor.get('amount')
+    operation = debtor.get('operation')
 
-    response, status_code = debtors_service.update_debtor(name, new_amount)
+    if not name or not isinstance(amount, (int, float)) or not operation:
+        return {"error": "All the fields 'name', 'operation' and 'amount' are required."}, 400
+
+    response, status_code = debtors_service.update_debtor(name, amount, operation)
+    # print(response)
     return jsonify(response), status_code
 
 #  route to delete a specified debtor
 @endpoints.route('/delete/<name>', methods=['DELETE'])
 def delete_debtor(name):
     response, status_code = debtors_service.delete_debtor(name)
+    print(response, status_code)
     return jsonify(response), status_code
 
 # route to add a new debtor
