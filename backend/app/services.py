@@ -7,12 +7,6 @@ class DebtorsManagementService:
         Provides methods to view, add, update, and delete debtor records.
     """
 
-    def reduce_debtor_amount(self, decrement, balance):
-        return balance - decrement
-
-    def increase_debtor_amount(self, increment, balance):
-        return balance + increment
-
     def view_debtor(self, name):
         """
         Retrieve information about a specific debtor by their name.
