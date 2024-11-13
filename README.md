@@ -2,7 +2,7 @@
 
 **Bhala Edolweni** (meaning "write on the knee" in Xhosa/Zulu) is a debt management application designed to efficiently manage debtor data. This application comprises a command-line interface (CLI) in Python and a graphical user interface (GUI) in React, connecting to a Kotlin backend (upcoming) through a RESTful API.
 
-## Current Features
+## Core Features
 
 - **Add Entries**: Users can add new debtor entries via the command line or GUI.
 - **View Entries**: The application allows users to read and view all existing entries.
