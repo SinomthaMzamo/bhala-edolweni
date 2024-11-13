@@ -69,8 +69,8 @@ def view_debtor(name):
             debtor = response_data.get("data")
             debtor_name = debtor.get("name")
             debtor_amount = debtor.get("amount")
-            print(f"|+ {'Single Account View':^31} +|")
-            print(f"Debtor Name: {debtor_name}\nBalance: R{debtor_amount:2f}")
+            print(f"\n|+ {'Single Account View':^31} +|")
+            print(f"Debtor Name: {debtor_name}\nBalance: R{debtor_amount:.2f}\n")
 
     except json.JSONDecodeError:
         print('An error occurred. Try again later.')
@@ -126,6 +126,16 @@ def delete_debtor(name):
     except json.JSONDecodeError as jde:
         print('An error occurred. Try again later.', response.text)
 
+def confirm_user_selection(action):
+    proceed = input("Please confirm, would you like to save these changes? (y/n): ")
+    if proceed.lower() == "y":
+        return True
+    elif proceed.lower() == "n":
+        return False
+    else:
+        print(f"'{proceed}' is not a valid selection. Please enter 'y' for (yes, save my changes) "
+           f"or 'n' for (no, cancel my changes).")
+
 
 class EdolweniCLI(cmd.Cmd):
     intro = 'Welcome to the "Bhala edolweni" debtors manager CLI. Type help or ? to list commands.\n'
@@ -154,8 +164,15 @@ class EdolweniCLI(cmd.Cmd):
         name, amount = args
         try:
             amount = float(amount)
-            # call the api to add debtor?
-            add_debtor(name, amount)
+            proceed = confirm_user_selection("")
+            if proceed:
+                # call the api to add debtor?
+                add_debtor(name, amount)
+            elif proceed is None:
+                self.do_add(arg)
+            else:
+                print('Operation cancelled.')
+                return
         except ValueError:
             print("Invalid amount. Please enter a valid number.")
 
@@ -183,8 +200,15 @@ class EdolweniCLI(cmd.Cmd):
         name, amount = args
         try:
             amount = float(amount)
-            # call the api to update debtor?
-            update_debtor(name, amount, 'reduce')
+            proceed = confirm_user_selection("")
+            if proceed:
+                # call the api to update debtor?
+                update_debtor(name, amount, 'reduce')
+            elif proceed is None:
+                self.do_reduce(arg)
+            else:
+                print('Operation cancelled.')
+                return
         except ValueError:
             print("Invalid amount. Please enter a valid number.")
 
@@ -201,8 +225,15 @@ class EdolweniCLI(cmd.Cmd):
         name, amount = args
         try:
             amount = float(amount)
-            # call the api to update debtor?
-            update_debtor(name, amount, 'increase')
+            proceed = confirm_user_selection("")
+            if proceed:
+                # call the api to update debtor?
+                update_debtor(name, amount, 'increase')
+            elif proceed is None:
+                self.do_increase(arg)
+            else:
+                print('Operation cancelled.')
+                return
         except ValueError:
             print("Invalid amount. Please enter a valid number.")
 
@@ -219,8 +250,15 @@ class EdolweniCLI(cmd.Cmd):
         name, amount = args
         try:
             amount = float(amount)
-            # call the api to update debtor?
-            update_debtor(name, amount, 'set')
+            proceed = confirm_user_selection("")
+            if proceed:
+                # call the api to update debtor?
+                update_debtor(name, amount, 'set')
+            elif proceed is None:
+                self.do_set(arg)
+            else:
+                print('Operation cancelled.')
+                return
         except ValueError:
             print("Invalid amount. Please enter a valid number.")
 
@@ -235,8 +273,15 @@ class EdolweniCLI(cmd.Cmd):
             print("Usage: delete, remove, settle, rm, erase, clear <name>,  eg. settle sinomtha mzamo-12")
             return
         try:
-            # call the api to update debtor?
-            delete_debtor(name)
+            proceed = confirm_user_selection("")
+            if proceed:
+                # call the api to delete debtor?
+                delete_debtor(arg)
+            elif proceed is None:
+                self.do_delete(arg)
+            else:
+                print('Operation cancelled.')
+                return
         except ValueError:
             print("Invalid amount. Please enter a valid number.")
 
@@ -256,14 +301,14 @@ class EdolweniCLI(cmd.Cmd):
         cmd_arg = line.split(' ', 1)
         for command, alias_list in self.aliases.items():
             if cmd_arg[0] in alias_list or cmd_arg[0] == command:
+                if command == "exit":  # Check if the command is an exit command
+                    return self.do_exit('')
+
+                # Check if there are additional arguments
                 if len(cmd_arg) > 1:
-                    # print(f"Alias detected. Running '{command} {cmd_arg[-1]}' instead of '{line}'.")
-                    getattr(self, f"do_{command}")(cmd_arg[-1])
+                    getattr(self, f"do_{command}")(cmd_arg[1])
                 else:
-                    pass
-                    # print(f"Alias detected. Running '{command}' instead of '{line}'.")
-                # Call the corresponding command method
-                getattr(self, f"do_{command}")('')
+                    getattr(self, f"do_{command}")('')
                 return
         # If no alias or command matches, display an error message
         print(f"Command '{line}' not recognized.\n")
@@ -271,8 +316,8 @@ class EdolweniCLI(cmd.Cmd):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         new_entry = sys.argv[1].replace("R", "")
-        name, amount = new_entry.split("-")
-        add_debtor(name, amount)
+        debtor_name, debtor_amount = new_entry.split("-")
+        add_debtor(debtor_name, debtor_amount)
         view_all_debtors()
         run_cli = input('Enter "run" to start the Bhala Edolweni CLI program. Press Enter to cancel.')
         if run_cli.lower() == 'run':
