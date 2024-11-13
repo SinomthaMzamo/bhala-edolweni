@@ -1,0 +1,32 @@
+$ contact-manager list
+Listing all contacts:
+-----------------------------------------
+1. John Doe        | john.doe@example.com   | 123-456-7890
+2. Jane Smith      | jane.smith@example.com | 987-654-3210
+3. Robby Williams  | robby.w@example.com    | 555-555-5555
+
+micro scripting:
+$ contact-manager remove --name "John Doe"
+Are you sure you want to remove 'John Doe'? (y/n): y
+Contact 'John Doe' removed successfully!
+
+
+loading bars:
+$ server-manager start
+Starting the server... [######----] 60%
+Server started successfully at http://localhost:8080
+
+
+status/reports:
+$ server-manager status
+Server Status:
+---------------
+Status: Running
+Port: 8080
+Uptime: 2 hours, 15 minutes
+Requests Handled: 347
+
+
+feedback:
+$ your_cli_tool process --file data.txt
+[SUCCESS] File 'data.txt' processed successfully! ✅

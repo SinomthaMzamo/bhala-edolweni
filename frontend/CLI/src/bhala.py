@@ -26,7 +26,7 @@ def add_debtor(name, amount):
             debtor_name = debtor_data.get("name")
             debtor_amount = debtor_data.get("amount")
 
-            print(f"{message}\nDebtor Name: {debtor_name}\nBalance: {debtor_amount}")
+            print(f"{message}\nDebtor Name: {debtor_name}\nBalance: R{debtor_amount:.2f}")
 
         elif response.status_code == 400:
             error_message = response_data.get("error")
@@ -46,16 +46,18 @@ def view_all_debtors():
             print(response_data.get("message"))
         elif response.status_code == 201:
             debtors = response_data.get("data")
-            print(f"Total: R{reduce(lambda x, y: x + y.get('amount', 0), debtors, 0)}")
-            print(f"+ {'+':>30}")
-            print(f"\n| {f'ALL DEBTORS ({len(debtors)})':^28} |")
-            print(f"| {'Name':<15} | {'Amount (R)':>10} |")
-            [print(f"| {debtor.get('name').capitalize():<15} | {debtor.get('amount'):>10} |") for debtor in debtors]
+            print(f"Total: R{reduce(lambda x, y: x + y.get('amount', 0), debtors, 0):.2f}")
+            print(f"+ {'+':>35}")
+            print(f"\n| {f'ALL DEBTORS ({len(debtors)})':^33} |")
+            print(f"| {'Name':<15} | {'Balance (R)':>15} |")
+            for debtor in debtors:
+                amount, name = debtor.get('amount'), debtor.get('name')
+                formatted_amount, formatted_name = f"R{amount:.2f}", name.capitalize()
+                print(f"| {debtor.get('name').capitalize():<15} | {formatted_amount:>15} |")
     except json.JSONDecodeError:
         print('An error occurred. Try again later.')
 
 def view_debtor(name):
-    pass
     url = f"{API_URL}/view/{name}"
     # send get request to view/<name> url
     response = requests.get(url)
@@ -67,8 +69,8 @@ def view_debtor(name):
             debtor = response_data.get("data")
             debtor_name = debtor.get("name")
             debtor_amount = debtor.get("amount")
-            print(f"|+ {'Single Account View':^26} +|")
-            print(f"Debtor Name: {debtor_name}\nBalance: {debtor_amount}")
+            print(f"|+ {'Single Account View':^31} +|")
+            print(f"Debtor Name: {debtor_name}\nBalance: R{debtor_amount:2f}")
 
     except json.JSONDecodeError:
         print('An error occurred. Try again later.')
@@ -212,7 +214,6 @@ class EdolweniCLI(cmd.Cmd):
         """
         args = arg.split("-")
         if len(args) != 2:
-            print(args)
             print("Usage: set, override or s <name>-<amount>,  eg. set sinomtha mzamo-12")
             return
         name, amount = args
@@ -256,15 +257,16 @@ class EdolweniCLI(cmd.Cmd):
         for command, alias_list in self.aliases.items():
             if cmd_arg[0] in alias_list or cmd_arg[0] == command:
                 if len(cmd_arg) > 1:
-                    print(f"Alias detected. Running '{command} {cmd_arg[-1]}' instead of '{line}'.")
+                    # print(f"Alias detected. Running '{command} {cmd_arg[-1]}' instead of '{line}'.")
                     getattr(self, f"do_{command}")(cmd_arg[-1])
                 else:
-                    print(f"Alias detected. Running '{command}' instead of '{line}'.")
+                    pass
+                    # print(f"Alias detected. Running '{command}' instead of '{line}'.")
                 # Call the corresponding command method
                 getattr(self, f"do_{command}")('')
                 return
         # If no alias or command matches, display an error message
-        print(f"Command '{line}' not recognized.")
+        print(f"Command '{line}' not recognized.\n")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -272,6 +274,6 @@ if __name__ == "__main__":
         name, amount = new_entry.split("-")
         add_debtor(name, amount)
         view_all_debtors()
-        run_cli = input('press "run" to run the Bhala Edolweni CLI program and then press enter. To cancel, press Enter or any key.')
+        run_cli = input('Enter "run" to start the Bhala Edolweni CLI program. Press Enter to cancel.')
         if run_cli.lower() == 'run':
             EdolweniCLI().cmdloop()
