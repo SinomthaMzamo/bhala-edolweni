@@ -54,6 +54,7 @@ def view_all_debtors():
                 amount, name = debtor.get('amount'), debtor.get('name')
                 formatted_amount, formatted_name = f"R{amount:.2f}", name.capitalize()
                 print(f"| {debtor.get('name').capitalize():<15} | {formatted_amount:>15} |")
+            print()
     except json.JSONDecodeError:
         print('An error occurred. Try again later.')
 
@@ -314,6 +315,7 @@ class EdolweniCLI(cmd.Cmd):
         print(f"Command '{line}' not recognized.\n")
 
 if __name__ == "__main__":
+    print(sys.argv)
     if len(sys.argv) > 1:
         new_entry = sys.argv[1].replace("R", "")
         debtor_name, debtor_amount = new_entry.split("-")
@@ -322,3 +324,5 @@ if __name__ == "__main__":
         run_cli = input('Enter "run" to start the Bhala Edolweni CLI program. Press Enter to cancel.')
         if run_cli.lower() == 'run':
             EdolweniCLI().cmdloop()
+    elif len(sys.argv) == 1:
+        EdolweniCLI().cmdloop()
