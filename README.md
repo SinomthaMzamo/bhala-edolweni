@@ -165,7 +165,7 @@ ___
 3. **Run the Python API:**
    ```bash
    cd backend
-   python main.py 
+   python3 main.py 
    ```
 
 4. **Install dependencies for the React frontend:**
@@ -178,7 +178,7 @@ ___
 5. **Run the Python CLI:**
    ```bash
    cd frontend/CLI/src
-   python bhala.py "Your Entry Here"
+   python3 bhala.py "Your Entry Here"
    ```
 
 6. **Start the React application:**
