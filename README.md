@@ -2,6 +2,21 @@
 
 **Bhala Edolweni** (meaning "write on the knee" in Xhosa/Zulu) is a debt management application designed to efficiently manage debtor data. This application comprises a command-line interface (CLI) in Python and a graphical user interface (GUI) in React, connecting to a Kotlin backend (upcoming) through a RESTful API.
 
+## Table of Contents
+
+1. [Core Features](#core-features)  
+2. [Current Functionality](#current-functionality)  
+   - [Command-Line Interface Program](#command-line-interface-program)  
+   - [Graphical User Interface Program](#graphical-user-interface-program)  
+3. [Future Development](#future-development)  
+4. [Project Structure](#project-structure)  
+   - [File Breakdown](#file-breakdown)  
+5. [Getting Started](#getting-started)  
+   - [Prerequisites](#prerequisites)  
+   - [Installation](#installation)  
+6. [Contributing](#contributing)  
+7. [License](#license) 
+
 ## Core Features
 
 - **Add Entries**: Users can add new debtor entries via the command line or GUI.
@@ -11,7 +26,7 @@
 
 ## Current Functionality
 
-#### _Command-Line Interface Program_
+#### _Command Line Interface Program_
 
 - **Add New Debtors**: Add new debtor entries through the command line using `bhala.py`.
 - **Store Debtor Information**: Saves entries to a Relational database (`edolweni.db`).
@@ -151,7 +166,7 @@ ___
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:SinomthaMzamo/bhala-edolweni.git
    cd bhala-edolweni
    ```
    
