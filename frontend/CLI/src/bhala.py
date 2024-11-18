@@ -42,9 +42,9 @@ def view_all_debtors():
     response = requests.get(url)
     try:
         response_data = response.json()
-        if response.status_code == 200:
+        if response.status_code == 204:
             print(response_data.get("message"))
-        elif response.status_code == 201:
+        elif response.status_code == 200:
             debtors = response_data.get("data")
             print(f"Total: R{reduce(lambda x, y: x + y.get('amount', 0), debtors, 0):.2f}")
             print(f"+ {'+':>35}")
@@ -55,6 +55,8 @@ def view_all_debtors():
                 formatted_amount, formatted_name = f"R{amount:.2f}", name.capitalize()
                 print(f"| {debtor.get('name').capitalize():<15} | {formatted_amount:>15} |")
             print()
+        elif response.status_code == 204:
+            print('\nYou currently have no debtors saved. Add a debtor to get started\n')
     except json.JSONDecodeError:
         print('An error occurred. Try again later.')
 
@@ -66,7 +68,7 @@ def view_debtor(name):
         response_data = response.json()
         if response.status_code == 404:
             print(response_data.get("error"),"\n")
-        elif response.status_code == 201:
+        elif response.status_code == 200:
             debtor = response_data.get("data")
             debtor_name = debtor.get("name")
             debtor_amount = debtor.get("amount")
@@ -90,21 +92,17 @@ def update_debtor(name, amount, operation):
     try:
         response_data = response.json()
 
-        if response.status_code == 201:
+        if response.status_code == 200:
             message = response_data.get("message")
             debtor_data = response_data.get("data", {})
             debtor_name = debtor_data.get("name")
             debtor_amount = debtor_data.get("amount")
 
             print(f"{message}\nDebtor Name: {debtor_name}\nBalance: {debtor_amount}")
-
-        elif response.status_code == 400:
-            error_message = response_data.get("error")
-            print(f"{error_message}\n Made a typo? Try a different name or choose to update the debtor named {name.capitalize()} to proceed.")
         elif response.status_code == 404:
             error_message = response_data.get("error")
             print(
-                f"{error_message}\n Made a typo? Try a different name or choose another operation.")
+                f"{error_message}\n Made a typo? Try a different name or create a new debtor under the name '{debtor_name.captitalize()}'.")
         else:
             print('Something went wrong and we are working on it. Try again later.')
     except json.JSONDecodeError:
