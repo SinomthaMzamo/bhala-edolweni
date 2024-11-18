@@ -1,7 +1,7 @@
 import unittest
-from . import create_app, database
-from .data_models import Debtor
-from .services import DebtorsManagementService as DMS
+from backend.app import create_app, database
+from backend.app.data_models import Debtor
+from backend.app.services import DebtorsManagementService as DMS
 
 class DoloServiceTest(unittest.TestCase):
 
@@ -50,8 +50,8 @@ class DoloServiceTest(unittest.TestCase):
     def test_view_debtor_success(self):
         with self.app.app_context():
             response, status_code = self.service.view_debtor("test debtor")
-        self.assertEqual(status_code, 201)
-        self.assertIn("Debtor 'test debtor' information retrieved successfully", response["message"])
+        self.assertEqual(status_code, 200)
+        self.assertIn("Debtor 'test debtor' information retrieved successfully.", response["message"])
         self.assertEqual(response["data"]["amount"], 21)
 
     def test_view_debtor_not_found(self):
@@ -63,7 +63,7 @@ class DoloServiceTest(unittest.TestCase):
     def test_view_all_debtors_found(self):
         with self.app.app_context():
             response, status_code = self.service.view_all_debtors()
-        self.assertEqual(status_code, 201)
+        self.assertEqual(status_code, 200)
         self.assertEqual(len(response["data"]), 1)
         self.assertEqual(response["data"][0]["name"], "test debtor")
 
@@ -73,13 +73,13 @@ class DoloServiceTest(unittest.TestCase):
             database.create_all()
         with self.app.app_context():
             response, status_code = self.service.view_all_debtors()
-        self.assertEqual(status_code, 200)
+        self.assertEqual(status_code, 204)
         self.assertIn("No debtors exist, add a debtor first.", response["message"])
 
     def test_update_debtor_success(self):
         with self.app.app_context():
             response, status_code = self.service.update_debtor("test debtor", 50, "set")
-        self.assertEqual(status_code, 201)
+        self.assertEqual(status_code, 200)
         self.assertIn("Debtor test debtor updated successfully", response["message"])
         self.assertEqual(response["data"]["amount"], 50)
 

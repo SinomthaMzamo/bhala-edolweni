@@ -1,8 +1,8 @@
 import unittest
 from flask import Flask
 from unittest.mock import MagicMock, patch
-from .routes import endpoints
-from . import database as db
+from backend.app.routes import endpoints
+from backend.app import database as db
 
 
 class TestAPIRoutes(unittest.TestCase):
@@ -30,8 +30,9 @@ class TestAPIRoutes(unittest.TestCase):
     def post_and_check(self, url, data, expected_status, expected_response):
         """Helper method to make POST requests and check responses."""
         response = self.client.post(url, json=data)
-        self.assertEqual(response.status_code, expected_status)
-        self.assertEqual(response.json, expected_response)
+        actual_response = response.json
+        self.assertEqual(expected_status, response.status_code)
+        self.assertEqual(expected_response, actual_response)
 
     def test_add_debtor_success(self):
         test_data = {
@@ -39,7 +40,7 @@ class TestAPIRoutes(unittest.TestCase):
             'amount': 12
         }
         successful_response = {
-            "message": f"Debtor '{test_data['name']}' added successfully",
+            "message": f"Debtor '{test_data['name']}' added successfully.",
             "data": {
                 "name": test_data['name'],
                 "amount": test_data['amount']
@@ -91,30 +92,29 @@ class TestAPIRoutes(unittest.TestCase):
         ]
         # Populate database or mock data if necessary
         for test_entry in test_data:
-            self.post_and_check('/api/add', test_data, 201, {
-                'message': f'Debtor data retrieved successfully ({len(test_data)})',
+            self.post_and_check('/api/add', test_entry, 201, {
+                'message': f"Debtor '{test_entry['name']}' added successfully.",
                 'data': test_entry
                                                              })
 
         # Expected response (assuming format is returned as a list)
-        expected_response = {'data': test_data}
-
-        self.post_and_check('/api/add', test_data, 201, expected_response)
+        expected_response = {'data': test_data,
+                             'message': f'Debtor data retrieved successfully ({len(test_data)}).'}
 
         response = self.client.get('/api/view')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, expected_response)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(expected_response, response.json)
 
     def test_view_debtor(self):
         test_data = {"name": "debtor1", "amount": 10}
         # Simulate adding debtor first
         self.client.post('/api/add', json=test_data)
 
-        expected_response = {'data': test_data}
+        expected_response = {'data': test_data, 'message': f"Debtor '{test_data["name"]}' information retrieved successfully."}
 
         response = self.client.get('/api/view/debtor1')
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json, expected_response)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(expected_response, response.json)
 
     def test_update_debtor(self):
         test_data = {"name": "debtor1", "amount": 10}
@@ -123,11 +123,11 @@ class TestAPIRoutes(unittest.TestCase):
 
         # todo: this should fail!
         updated_data = {"name": "debtor1", "amount": 15, "operation": "add"}
-        successful_response = {'data': {'amount': 25, 'name': 'debtor1'}, "message": "Debtor debtor1 updated successfully"}
+        successful_response = {'data': {'amount': 25, 'name': 'debtor1'}, "message": "Debtor debtor1 updated successfully."}
 
         response = self.client.put('/api/update', json=updated_data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.json, successful_response)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(successful_response, response.json)
 
     def test_delete_debtor(self):
         test_data = {"name": "debtor1", "amount": 0}
@@ -138,6 +138,6 @@ class TestAPIRoutes(unittest.TestCase):
 
         response = self.client.delete('/api/delete/debtor1')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, successful_response)
+        self.assertEqual(successful_response, response.json)
 if __name__ == '__main__':
     unittest.main()

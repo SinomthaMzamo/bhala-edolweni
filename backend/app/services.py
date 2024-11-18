@@ -23,8 +23,8 @@ class DebtorsManagementService:
         if not debtor:
             return {"error": f"Debtor '{name}' not found."}, 404
 
-        return {"message": f"Debtor '{name}' information retrieved successfully",
-                "data": {"name": debtor.name, "amount": debtor.amount}}, 201
+        return {"message": f"Debtor '{name}' information retrieved successfully.",
+                "data": {"name": debtor.name, "amount": debtor.amount}}, 200
 
     def view_all_debtors(self):
         """
@@ -34,8 +34,8 @@ class DebtorsManagementService:
             dict: A response containing a list of all debtors or a message if no debtors exist.
             int: HTTP status code indicating the result of the operation.
         """
-        no_debtors_found_code = 200
-        debtors_found_code = 201
+        no_debtors_found_code = 204
+        debtors_found_code = 200
 
         debtors = Debtor.query.all()
 
@@ -43,7 +43,7 @@ class DebtorsManagementService:
             return {"message": "No debtors exist, add a debtor first."}, no_debtors_found_code
         debtors_data_as_json_array = [{'name': d.name, 'amount': d.amount} for d in debtors]
 
-        return {"message": f"Debtor data retrieved successfully ({len(debtors)})",
+        return {"message": f"Debtor data retrieved successfully ({len(debtors)}).",
                 "data": debtors_data_as_json_array}, debtors_found_code
 
     def add_debtor(self, name, amount):
@@ -59,13 +59,13 @@ class DebtorsManagementService:
             int: HTTP status code indicating the result of the operation.
         """
         if Debtor.query.filter_by(name=name).first():
-            return {"error": "A Debtor by that name already exists"}, 400
+            return {"error": "A Debtor by that name already exists."}, 400
 
         new_debtor = Debtor(name=name, amount=amount)
         db.session.add(new_debtor)
         db.session.commit()
 
-        return {"message": f"Debtor '{name}' added successfully", "data": {"name": name, "amount": amount}}, 201
+        return {"message": f"Debtor '{name}' added successfully.", "data": {"name": name, "amount": amount}}, 201
 
     def update_debtor(self, name, amount, operation):
         """
@@ -86,8 +86,8 @@ class DebtorsManagementService:
         requested_debtor.amount = final_balance
         db.session.commit()
 
-        return {"message": f"Debtor {requested_debtor.name} updated successfully",
-                "data": {"name": requested_debtor.name, "amount": requested_debtor.amount}}, 201
+        return {"message": f"Debtor {requested_debtor.name} updated successfully.",
+                "data": {"name": requested_debtor.name, "amount": requested_debtor.amount}}, 200
 
     def delete_debtor(self, name):
         """
