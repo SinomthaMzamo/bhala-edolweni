@@ -27,7 +27,7 @@ const AddForm = () => {
             // send data to api
             axios.post("http://127.0.0.1:5000/add", {
                 name: name,
-                amount: amount,
+                amount: parseInt(amount),
             }, {
                 headers: {
                     'Content-Type': 'application/json'
