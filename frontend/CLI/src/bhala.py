@@ -134,6 +134,7 @@ def confirm_user_selection(action):
     else:
         print(f"'{proceed}' is not a valid selection. Please enter 'y' for (yes, save my changes) "
            f"or 'n' for (no, cancel my changes).")
+        return -1
 
 
 class EdolweniCLI(cmd.Cmd):
@@ -317,10 +318,12 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         new_entry = sys.argv[1].replace("R", "")
         debtor_name, debtor_amount = new_entry.split("-")
-        add_debtor(debtor_name, debtor_amount)
-        view_all_debtors()
-        run_cli = input('Enter "run" to start the Bhala Edolweni CLI program. Press Enter to cancel.')
-        if run_cli.lower() == 'run':
-            EdolweniCLI().cmdloop()
+        selection_is_confirmed = confirm_user_selection('')
+        if selection_is_confirmed:
+            add_debtor(debtor_name, int(debtor_amount))
+            view_all_debtors()
+            run_cli = input('Enter "run" to start the Bhala Edolweni CLI program. Press Enter to cancel.')
+            if run_cli.lower() == 'run':
+                EdolweniCLI().cmdloop() 
     elif len(sys.argv) == 1:
         EdolweniCLI().cmdloop()

@@ -9,6 +9,6 @@ import ExampleComponent from './ui/ExampleComponent.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App/>
+    <Table/>
   </StrictMode>,
 )
