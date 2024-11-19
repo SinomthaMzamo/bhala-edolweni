@@ -65,7 +65,7 @@ $ python bhala.py "debtor3-8"
 ## Future Development
 
 - **Kotlin CLI**: Transition the Python script to a Kotlin cli application.
-- **Kotlin RESTful API**: A backend will be developed to facilitate interaction with debtor data, allowing both the GUI and CLI to access the data seamlessly.
+- **Kotlin RESTful API**: The backend has been established using Python, Flask, and Flask SQLAlchemy to facilitate interaction with debtor data. This serves as a prototype for transitioning to a Kotlin-based backend in the future, enabling seamless access to data for both the GUI and CLI.
 - **Edit Existing Debtor**: Upcoming functionality to update debtor information via GUI.
 - **Settle Debtor**: Future feature to settle debts and remove them from the database via GUI.
 
