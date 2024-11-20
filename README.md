@@ -1,6 +1,6 @@
 # Bhala Edolweni
 
-**Bhala Edolweni** (meaning "write on the knee" in Xhosa/Zulu) is a debt management application designed to efficiently manage debtor data. This application comprises a command-line interface (CLI) in Python and a graphical user interface (GUI) in React, connecting to a Kotlin backend (upcoming) through a RESTful API.
+**Bhala Edolweni** (meaning "write on the knee" in Xhosa/Zulu) is a debt management application designed to efficiently manage debtor data. This application comprises a command-line interface (CLI) in Python and a graphical user interface (GUI) in React, connecting to a Python (Flask, SQLAlchemy) through a RESTful API (Flask). It is currently undergoing brownfields development to migrate to the Kotlin ecosystem to improve scalability, efficiency and to leverage the adaptability provided by Kotlin Multiplatform (KMP)
 
 ## Table of Contents
 
