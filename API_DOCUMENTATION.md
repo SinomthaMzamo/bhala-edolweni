@@ -3,7 +3,7 @@
 
 ### **Base URL**
 ```
-http://<your-domain>/api
+http://localhost:5000/
 ```
 
 ---
