@@ -14,8 +14,54 @@ const Row = ({debtor, number}) => {
     const nameInputRef = useRef();
     const amountInputRef = useRef();
 
+    const [focus, setFocus] = useState(false);
+
+    const onControlClick = (event) => {
+        setFocus(true);
+        resetState();
+        handleClick(event);
+    }
+
+    const showFinalOptions = () => {
+        return !focus;
+    }
+
+    const hideControls = () => { return Object.values(state).some(mode => mode === true) };
+        
+
+    const resetState = () => {
+        setState(prevState => ({
+            ...Object.keys(prevState).reduce((acc, currentKey) => {
+                acc[currentKey] = false; // set all keys to false (reset)
+                return acc;
+            }, {}),
+        }));
+    };
+
     const handleClick = (eventName) => {
         // when any icon is clicked,
+        switch(eventName.toLowerCase()){
+            case 'edit':
+                handleEdit();
+                break;
+            case 'delete':
+                handleRemoval();
+                break;
+            case 'view':
+                handleView();
+                break;
+            case 'save':
+                handleSave();
+                break;
+            case 'cancel':
+                setNameState(debtor.name);
+                setAmountState(debtor.amount);
+                resetState();
+                setFocus(false);
+                break;
+            default:
+                console.log(`${eventName} button clicked!`);
+        }
         // hide the normal icons and display the save and cancel icons
         // 1. update state and ensure only current operation is set to true
         // call the required handler for that icon
@@ -23,7 +69,16 @@ const Row = ({debtor, number}) => {
         }
 
     const handleSave = () => {
+        // updateNameState(e);
+        // updateAmountState(e);
         // check the state for current operation
+        for (const operation of Object.keys(state)){
+            if (state[`${operation}`]){
+                console.log(`sending request to ${operation}/`, {name: nameInputRef.current.value, amount: amountInputRef.value});
+            }
+        }
+        resetState();
+        setFocus(false);
         // front-side validation of updates
         // make api call to relevant endpoint
         // report
@@ -37,15 +92,16 @@ const Row = ({debtor, number}) => {
 
         // disable other icons and show save button
         console.log('form is being edited!');
+        console.log('editing:', debtor);
     }
 
     // im gonna need these for clientside validation and making api calls
-    const handleNameInput = (e) => {
+    const updateNameState = (e) => {
         const newNameValue = e.target.value;
         setNameState(newNameValue);
     };
 
-    const handleAmountInput = (e) => {
+    const updateAmountState = (e) => {
         const newAmountValue = e.target.value;
         setAmountState(parseInt(newAmountValue));
     };
@@ -63,6 +119,8 @@ const Row = ({debtor, number}) => {
     const handleView = () => {
         // bring up a modal summarising debtor info
         console.log(debtor, 'showing debtor info');
+        setFocus(false);
+
     }
 
 
@@ -115,26 +173,28 @@ const Row = ({debtor, number}) => {
                 <td>{date}</td>
                 <td>
                     <div className="shortcuts" style={{display:'flex'}}>
-                        <IconButton
+                        { showFinalOptions() && <IconButton
                         icon={edit}
-                        onClick={handleEdit}
-                        />
-                        <IconButton
+                        onClick={() => onControlClick('edit')}
+                        />}
+                        { showFinalOptions() && <IconButton
                         icon={remove}
-                        onClick={handleRemoval}
-                        />
-                        <IconButton
+                        onClick={() => onControlClick('delete')}
+                        />}
+                        { showFinalOptions() && <IconButton
                         icon={view}
-                        onClick={handleView}
-                        />
+                        onClick={() => onControlClick('view')}
+                        />}
+                        { hideControls() && 
                         <IconButton
                         icon={save}
-                        onClick={}
-                        />
+                        onClick={handleSave}
+                        />}
+                        { hideControls() &&
                         <IconButton
                         icon={cancel}
-                        onClick={}
-                        />
+                        onClick={() => handleClick('cancel')}
+                        />}
 
                     </div>
                 </td>

@@ -5,7 +5,6 @@ import './index.css'
 import Row from './ui/Row.jsx'
 import Table from './ui/Table.jsx'
 import View from './features/main/View.jsx'
-import ExampleComponent from './ui/ExampleComponent.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
