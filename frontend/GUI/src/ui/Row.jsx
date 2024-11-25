@@ -37,7 +37,10 @@ const Row = ({debtor, number}) => {
     };
 
     const handleRemoval = () => {
-        // make row's outer boarder red
+        setState(prevState => ({
+            ...prevState, 
+            isDeleting: true}));
+        // make row's outer boarder red, i.e render the custom warning style
         // check debtor balance, reject if it is more than 0
         console.log('delete icon clicked!')
 
@@ -71,12 +74,15 @@ const Row = ({debtor, number}) => {
         );
     };
 
-    const [edit, remove, view] = ["fas fa-pencil", "fas fa-trash", "fas fa-info"];
+    const [edit, remove, view, save, cancel] = ["fas fa-edit", "fas fa-trash", "fas fa-info", "fas fa fa-check", "fas fa-times"];
     const { id, name, amount, date} = debtor;
 
     return ( 
         <>
-            <tr>
+            <tr style={{
+                    border: state.isDeleting ? '3px solid red': 'initial',
+                    borderColor: state.isDeleting ? 'red' : 'initial',
+                    boxShadow: state.isDeleting ? '0 0 8px red' : 'initial'}}>
                 <th scope='row'>{number}</th>
                 {state.isEditing ? (
                     
@@ -89,7 +95,7 @@ const Row = ({debtor, number}) => {
                 {state.isEditing ? (
                     <td><AmountInputField/></td>  
                 ) : (
-                    <td>R{amount}</td>
+                    <td>R {amount}.00</td>
                 )}
                 
                 <td>{date}</td>
@@ -106,6 +112,14 @@ const Row = ({debtor, number}) => {
                         <IconButton
                         icon={view}
                         onClick={handleView}
+                        />
+                        <IconButton
+                        icon={save}
+                        onClick={handleEdit}
+                        />
+                        <IconButton
+                        icon={cancel}
+                        onClick={handleEdit}
                         />
 
                     </div>
