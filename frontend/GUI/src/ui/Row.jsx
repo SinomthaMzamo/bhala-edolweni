@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import IconButton from './IconButton';
 
 const Row = ({debtor, number}) => {
@@ -74,8 +75,12 @@ const Row = ({debtor, number}) => {
         // check the state for current operation
         for (const operation of Object.keys(state)){
             if (state[`${operation}`]){
-                console.log(`sending request to ${operation}/`, {name: nameInputRef.current.value, amount: amountInputRef.value});
+                console.log(`sending request to ${operation}/`, {name: debtor.name, amount: debtor.amount});
+                if(operation.endsWith('Deleting')){
+                    sendDeleteRequest();
+                }
             }
+            
         }
         resetState();
         setFocus(false);
@@ -105,6 +110,27 @@ const Row = ({debtor, number}) => {
         const newAmountValue = e.target.value;
         setAmountState(parseInt(newAmountValue));
     };
+
+    function sendDeleteRequest() {
+
+        if (debtor.amount > 0) {
+            console.log("Cannot delete a debtor with a positive balance!");
+            return;
+        }
+        
+        // send data to api
+        axios.delete(`http://127.0.0.1:5000/delete/${debtor.name}`)
+        .then(response => {
+            console.log(response.data);
+            // Set the feedback message
+            console.log(`Debtor '${name}' added successfully with a balance of ${amount}.`);
+
+            setTimeout(() => console.log('a true success!'), 5000);
+        })
+        .catch(error => {
+            console.error("There was an error sending the request!", error);
+        }); // Perform the effect
+}
 
     const handleRemoval = () => {
         setState(prevState => ({
