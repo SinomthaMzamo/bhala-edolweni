@@ -47,6 +47,7 @@ const Table = () => {
                 <table className="table table-hover caption-top">
                     <caption>
                         <h2>Total: ZAR {totalAmount}</h2>
+                        <i className="fa fa-plus-square fa-2x" aria-hidden="true"></i>
                     </caption>
                     <thead>
                         <tr>
