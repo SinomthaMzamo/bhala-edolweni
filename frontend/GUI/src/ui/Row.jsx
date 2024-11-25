@@ -14,6 +14,20 @@ const Row = ({debtor, number}) => {
     const nameInputRef = useRef();
     const amountInputRef = useRef();
 
+    const handleClick = (eventName) => {
+        // when any icon is clicked,
+        // hide the normal icons and display the save and cancel icons
+        // 1. update state and ensure only current operation is set to true
+        // call the required handler for that icon
+        // 2. the save and cancel button should be rendered
+        }
+
+    const handleSave = () => {
+        // check the state for current operation
+        // front-side validation of updates
+        // make api call to relevant endpoint
+        // report
+        }
 
     const handleEdit = () => {
         // make the row name and amount fields editable
@@ -115,11 +129,11 @@ const Row = ({debtor, number}) => {
                         />
                         <IconButton
                         icon={save}
-                        onClick={handleEdit}
+                        onClick={}
                         />
                         <IconButton
                         icon={cancel}
-                        onClick={handleEdit}
+                        onClick={}
                         />
 
                     </div>
