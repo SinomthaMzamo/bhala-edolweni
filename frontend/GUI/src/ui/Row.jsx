@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import IconButton from './IconButton';
 
-const Row = ({debtor, number, onUpdate}) => {
+const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
     const [state, setState] = useState({
         isEditing: false,
         isDeleting: false,
@@ -18,6 +18,8 @@ const Row = ({debtor, number, onUpdate}) => {
 
     const onControlClick = (event) => {
         setFocus(true);
+        console.log(focus)
+        onFocus();
         resetState();
         handleClick(event);
     }
@@ -77,6 +79,8 @@ const Row = ({debtor, number, onUpdate}) => {
                 console.log(`sending request to ${operation}/`, {name: debtor.name, amount: debtor.amount});
                 if(operation.endsWith('Deleting')){
                     sendDeleteRequest();
+                } else if (operation.endsWith('Editing')) {
+                    sendUpdateRequest();
                 }
             }
             
@@ -97,6 +101,28 @@ const Row = ({debtor, number, onUpdate}) => {
         // disable other icons and show save button
         console.log('form is being edited!');
         console.log('editing:', debtor);
+    }
+
+    function sendUpdateRequest() {
+        const updatedDebtorData = debtor;
+        updatedDebtorData.name = nameState;
+        updatedDebtorData.amount = amountState;
+
+        const updateRequest = {
+            name: updatedDebtorData.name,
+            amount: updatedDebtorData.amount,
+            operation: 'set'
+        }
+
+        axios.put('http://127.0.0.1:5000/update', updateRequest, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error('There was an error updating the debtor', error);
+        });
     }
 
     // im gonna need these for clientside validation and making api calls
@@ -136,6 +162,7 @@ const Row = ({debtor, number, onUpdate}) => {
             console.error("There was an error sending the request!", error);
         }).finally( () => {
             console.log('this is the end')
+            onDelete(); // update parent
         }
         ); // Perform the effect
     }

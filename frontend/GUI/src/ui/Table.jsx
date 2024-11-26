@@ -23,12 +23,37 @@ const Table = () => {
     
     useEffect(() => {
         fetchDebtors();
-    });
+    }, []);
 
     const handleRowUpdate = () => {
         setRefreshFlag(true); // Toggle the flag to trigger a refresh
         console.log(refreshFlag)
       };
+
+    const handleRowFocus = (id) => {
+        //allow the Table component to control focus mode for each row
+        console.log('You are focused on', generateFocusMap()[id])
+
+    }
+
+    const handleDelete = (id) => {
+        const workingDebtors = allDebtors;
+        delete workingDebtors[id];
+        setAllDebtors(workingDebtors);
+    }
+
+    const generateFocusMap = () => {
+        let indexIncrement = 0;
+        const focusMap = {};
+        console.log('all debtors', allDebtors)
+        for (let debtor of Object.values(allDebtors)) {
+            console.log(debtor);
+            focusMap[indexIncrement] = debtor;
+            ++indexIncrement;
+            console.log(focusMap)
+        }
+        return focusMap;
+    }
 
 
     const generateDebtorsMapWithId = allDebtors => {
@@ -41,11 +66,12 @@ const Table = () => {
             debtor['date'] = '11/11/2024'
             ++indexIncrement;
         }
+        console.log('working debtors', workingDebtors);
         return workingDebtors;
     }
     
     
-    console.log(allDebtors);
+    // console.log(allDebtors);
     const totalAmount = Object.values(allDebtors).reduce((amount, debtor) => amount + Number(debtor.amount), 0)
 
     return ( 
@@ -67,7 +93,7 @@ const Table = () => {
                     </thead>
                     <tbody>
                         {Object.entries(allDebtors).map(([id, debtor], index) => (
-                            <Row debtor={debtor} number={index+1} key={id} onUpdate={handleRowUpdate}/>
+                            <Row debtor={debtor} number={index+1} key={id} onUpdate={handleRowUpdate} onFocus={() => handleRowFocus(id)} onDelete={() => handleDelete(id)}/>
                         ))}
                     </tbody>
                 </table>
