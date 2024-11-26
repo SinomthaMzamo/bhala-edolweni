@@ -1,5 +1,8 @@
 node_modules/
 .venv/
 .idea/
+.vscode/
 backend/__pycache__/
 backend/app/__pycache__/
+backend/instance
+instance/
