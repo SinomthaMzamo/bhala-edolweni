@@ -1,36 +1,53 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import IconButton from './IconButton';
+import ViewDebtor from './ViewDebtor';
+import { instanceOf } from 'prop-types';
+import toTitle from '../utils/strings';
 
+
+// Row component renders a single debtor row with controls for editing, viewing, and deleting.
 const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
+    // State management for editing, deleting, and viewing debtor info
     const [state, setState] = useState({
         isEditing: false,
         isDeleting: false,
         isViewing: false,
     })
     
+    // State to track changes in debtor's name and amount during editing
     const [nameState, setNameState] = useState(debtor.name);
     const [amountState, setAmountState] = useState(debtor.amount);
+
+    // Focus state to manage input focus during interaction
     const [focus, setFocus] = useState(false);
 
+    // Open View modal state 
+    const [openViewDebtor, setOpenViewDebtor] = useState(false);
+
+    // Refs to manage input fields for debtor name and amount
     const nameInputRef = useRef();
     const amountInputRef = useRef();
+    
 
+    // Handles clicks on any control button (edit, delete, view, etc.)
     const onControlClick = (event) => {
         setFocus(true);
         console.log(focus)
-        onFocus();
+        onFocus();  // Notify parent component to handle focus state
         resetState();
-        handleClick(event);
+        handleClick(event); // Handle the intended button click action
     }
 
+    // Determines if the final save and cancel options should be shown
     const showFinalOptions = () => {
         return !focus;
     }
 
+    // Determines if control buttons should be hidden
     const hideControls = () => { return Object.values(state).some(mode => mode === true) };
         
-
+    // Resets the state flags for editing, deleting, and viewing
     const resetState = () => {
         setState(prevState => ({
             ...Object.keys(prevState).reduce((acc, currentKey) => {
@@ -40,6 +57,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
         }));
     };
 
+    // Main handler for control button actions (edit, delete, save, cancel)
     const handleClick = (eventName) => {
         // when any icon is clicked,
         switch(eventName.toLowerCase()){
@@ -68,8 +86,9 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
         // 1. update state and ensure only current operation is set to true
         // call the required handler for that icon
         // 2. the save and cancel button should be rendered
-        }
+    }
 
+    // Handles saving the changes to the debtor (either update or delete)
     const handleSave = () => {
         // updateNameState(e);
         // updateAmountState(e);
@@ -90,8 +109,9 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
         // front-side validation of updates
         // make api call to relevant endpoint
         // report
-        }
+    }
 
+    // Initiates the editing state: allows name and amount to be edited
     const handleEdit = () => {
         // make the row name and amount fields editable
         setState(prevState => ({
@@ -103,17 +123,29 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
         console.log('editing:', debtor);
     }
 
+    // Sends an update request to the backend to save changes to debtor data
     function sendUpdateRequest() {
         const updatedDebtorData = debtor;
-        updatedDebtorData.name = nameState;
-        updatedDebtorData.amount = amountState;
 
+        const latestNameValue = nameInputRef.current.value;             // this feature needs to be marked 'coming soon' 
+        const latestAmountValue = parseFloat(amountInputRef.current.value);
+        console.log(latestAmountValue, latestNameValue, 'latest captured value')
+
+        updatedDebtorData.name = typeof latestNameValue === 'string' ? latestNameValue : nameState;
+        updatedDebtorData.amount = !isNaN(latestAmountValue) ? latestAmountValue : amountState;
+        console.log('updated debtor data', updatedDebtorData);
+
+        // This is where you would get user confirmation or preview changes
+
+
+        // Prepare request body for update
         const updateRequest = {
             name: updatedDebtorData.name,
             amount: updatedDebtorData.amount,
             operation: 'set'
         }
 
+        // Send PUT request to update debtor info
         axios.put('http://127.0.0.1:5000/update', updateRequest, {
             headers: {
                 'Content-Type': 'application/json'
@@ -136,6 +168,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
         setAmountState(parseInt(newAmountValue));
     };
 
+    // Sends a delete request to the backend to remove the debtor
     function sendDeleteRequest() {
 
         if (debtor.amount > 0) {
@@ -143,7 +176,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             return;
         }
         
-        // send request to delete to api
+        // Send DELETE request to delete debtor data
         axios.delete(`http://127.0.0.1:5000/delete/${debtor.name}`)
         .then(response => {
             console.log(response.data);
@@ -151,7 +184,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             if (response.status == 200){
                 console.log(response.data.message);
                 setTimeout(() => console.log('a true success!'), 5000);
-                onUpdate();
+                onUpdate();     // Refresh the parent component (update data)
                 console.log('we just refreshed');
             } else {
                 throw new Error(response.data.error);
@@ -164,9 +197,10 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             console.log('this is the end')
             onDelete(); // update parent
         }
-        ); // Perform the effect
+        );
     }
 
+    // Handle removal action: shows a red warning for deletion
     const handleRemoval = () => {
         setState(prevState => ({
             ...prevState, 
@@ -177,14 +211,25 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
 
     }
 
+    // Handle viewing action: shows debtor details in a modal
     const handleView = () => {
         // bring up a modal summarising debtor info
-        console.log(debtor, 'showing debtor info');
+        // console.log(debtor, 'showing debtor info');
         setFocus(false);
+        
+
 
     }
 
+    const handleOpenViewDebtor = () => {
+        setOpenViewDebtor(true)
+    }
 
+    const handleCloseViewDebtor = () => {
+        setOpenViewDebtor(false);
+    }
+
+    // Name input field for editing debtor's name
     const NameInputField = () => {
         return ( 
             <input
@@ -194,7 +239,8 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             />
          );
     }
-     
+
+    // Amount input field for editing debtor's amount
     const AmountInputField = () => {
         return(
             <input
@@ -206,9 +252,13 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             />
         );
     };
-
+    
+     // Icons for controls: edit, remove, view, save, cancel
     const [edit, remove, view, save, cancel] = ["fas fa-edit", "fas fa-trash", "fas fa-info", "fas fa fa-check", "fas fa-times"];
     const { id, name, amount, date} = debtor;
+    
+    // const handleOpen = () => setOpenViewDebtor(true);
+    // const handleClose = () => setOpenViewDebtor(false);
 
     return ( 
         <>
@@ -222,7 +272,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
                     <td><NameInputField/></td>
                     
                 ) : (
-                    <td>{name}</td>
+                    <td>{toTitle(name)}</td>
                 )}
                 
                 {state.isEditing ? (
@@ -242,10 +292,13 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
                         icon={remove}
                         onClick={() => onControlClick('delete')}
                         />}
-                        { showFinalOptions() && <IconButton
-                        icon={view}
-                        onClick={() => onControlClick('view')}
-                        />}
+                        { showFinalOptions() && 
+                        <ViewDebtor view={'view'} onControlClick={onControlClick} handleClose={handleCloseViewDebtor} handleOpen={handleOpenViewDebtor}/>
+                        // <IconButton
+                        // icon={view}
+                        // onClick={() => onControlClick('view')}
+                        // />
+                        }
                         { hideControls() && 
                         <IconButton
                         icon={save}
