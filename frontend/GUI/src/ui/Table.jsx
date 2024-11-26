@@ -4,25 +4,32 @@ import Row from './Row';
 
 const Table = () => {
     const [allDebtors, setAllDebtors] = useState([]);
+    const [refreshFlag, setRefreshFlag] = useState(false);
     
+    const fetchDebtors = async () => {
+        try{
+            const response = await axios.get('http://127.0.0.1:5000/view');
+            const debtorData = response.data.data
+            if(Array.isArray(debtorData)){
+                setAllDebtors(generateDebtorsMapWithId(debtorData));
+            } else {
+                console.error("Response malformed")
+                console.error(debtorData)
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
     
     useEffect(() => {
-        const fetchDebtors = async () => {
-            try{
-                const response = await axios.get('http://127.0.0.1:5000/view');
-                const debtorData = response.data.data
-                if(Array.isArray(debtorData)){
-                    setAllDebtors(generateDebtorsMapWithId(debtorData));
-                } else {
-                    console.error("Response malformed")
-                    console.error(debtorData)
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
         fetchDebtors();
-    }, []);
+    });
+
+    const handleRowUpdate = () => {
+        setRefreshFlag(true); // Toggle the flag to trigger a refresh
+        console.log(refreshFlag)
+      };
+
 
     const generateDebtorsMapWithId = allDebtors => {
         const workingDebtors = {}
@@ -60,7 +67,7 @@ const Table = () => {
                     </thead>
                     <tbody>
                         {Object.entries(allDebtors).map(([id, debtor], index) => (
-                            <Row debtor={debtor} number={index+1} key={id}/>
+                            <Row debtor={debtor} number={index+1} key={id} onUpdate={handleRowUpdate}/>
                         ))}
                     </tbody>
                 </table>

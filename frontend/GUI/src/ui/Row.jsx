@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import IconButton from './IconButton';
 
-const Row = ({debtor, number}) => {
+const Row = ({debtor, number, onUpdate}) => {
     const [state, setState] = useState({
         isEditing: false,
         isDeleting: false,
@@ -11,11 +11,10 @@ const Row = ({debtor, number}) => {
     
     const [nameState, setNameState] = useState(debtor.name);
     const [amountState, setAmountState] = useState(debtor.amount);
+    const [focus, setFocus] = useState(false);
 
     const nameInputRef = useRef();
     const amountInputRef = useRef();
-
-    const [focus, setFocus] = useState(false);
 
     const onControlClick = (event) => {
         setFocus(true);
@@ -118,19 +117,28 @@ const Row = ({debtor, number}) => {
             return;
         }
         
-        // send data to api
+        // send request to delete to api
         axios.delete(`http://127.0.0.1:5000/delete/${debtor.name}`)
         .then(response => {
             console.log(response.data);
-            // Set the feedback message
-            console.log(`Debtor '${name}' added successfully with a balance of ${amount}.`);
-
-            setTimeout(() => console.log('a true success!'), 5000);
+            // error handling
+            if (response.status == 200){
+                console.log(response.data.message);
+                setTimeout(() => console.log('a true success!'), 5000);
+                onUpdate();
+                console.log('we just refreshed');
+            } else {
+                throw new Error(response.data.error);
+            }
+            
         })
         .catch(error => {
             console.error("There was an error sending the request!", error);
-        }); // Perform the effect
-}
+        }).finally( () => {
+            console.log('this is the end')
+        }
+        ); // Perform the effect
+    }
 
     const handleRemoval = () => {
         setState(prevState => ({
