@@ -19,8 +19,8 @@
 
 ## Core Features
 
-- **Add Entries**: Users can add new debtor entries via the command line or GUI.
-- **View Entries**: The application allows users to read and view all existing entries.
+- **Add Entries**: Users can add new debtor entries.
+- **View Entries**: The application allows users to view all existing entries and specific entries.
 - **Update Entries**: The application allows users to update existing entries
 - **Delete Entries**: The application allows users to delete settled debtor accounts
 
@@ -52,15 +52,23 @@ $ python bhala.py "debtor3-8"
 
 ## _Graphical User Interface Program_
 
-- **View All Debtors**: Displays a table of all debtors, including name, amount owed, and date.
-- **Add New Debtor**: A form for adding new debtor entries to the system.
-- **Store Debtor Information**: Saves entries in a Relational database (`edolweni.db`).
+- **View All Debtors**: Displays a table of all debtors, with columns for the debtor's name, amount owed, and the date. Each row includes icons for editing, deleting, and viewing debtor details.
+- **CRUD Operations**: All CRUD operations (Create, Read, Update, Delete) are supported:
+  - **Add New Debtor**: A form allows users to add new debtor entries, accessible via an 'Add New' button.
+  - **Edit Debtor**: Existing debtor information can be edited directly in the table using the edit icon.
+  - **Delete Debtor**: Settled debtors can be removed from the system using the delete icon next to each entry.
+  - **View Debtor**: Click the view icon to view detailed information about a debtor.
+- **Search Functionality**: The header includes a search bar to filter debtors by name.
+- **Navigation**: A burger menu in the header allows easy access to additional features of the application.
 
 ### Usage:
 
-- **Viewing Debtors**: Click on the "View All Debtors" tab to see the list of all debtors.
-- **Adding a New Debtor**: Select the "Add New Debtor" tab, fill in the debtor's name and amount, then submit the form.
-- **Editing and Settling Debtors**: These features are under development and will be added in future releases.
+- **Viewing Debtors**: The table of debtors will be displayed by default, showing all debtor records.
+- **Adding a New Debtor**: Click the "Add New" button above the table, fill in the debtor's name and amount owed, and submit the form to add a new entry.
+- **Editing a Debtor**: To edit a debtor's information, click the edit icon in the respective row, make the changes, and save them.
+- **Deleting a Debtor**: To delete a debtor, click the delete icon in the respective row to remove the debtor's record from the system.
+- **Search Debtors**: Use the search bar in the header to filter the debtors by name.
+
 
 ## Future Development
 
