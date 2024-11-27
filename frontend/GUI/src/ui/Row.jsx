@@ -286,31 +286,11 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
                 <td>{date}</td>
                 <td>
                     <div className="shortcuts" style={{display:'flex'}}>
-                        { showFinalOptions() && <IconButton
-                        icon={edit}
-                        onClick={() => onControlClick('edit')}
-                        />}
-                        { showFinalOptions() && <IconButton
-                        icon={remove}
-                        onClick={() => onControlClick('delete')}
-                        />}
-                        { showFinalOptions() && 
-                        <ViewDebtor view={'view'} onControlClick={onControlClick} handleClose={handleCloseViewDebtor} handleOpen={handleOpenViewDebtor}/>
-                        // <IconButton
-                        // icon={view}
-                        // onClick={() => onControlClick('view')}
-                        // />
-                        }
-                        { hideControls() && 
-                        <IconButton
-                        icon={save}
-                        onClick={handleSave}
-                        />}
-                        { hideControls() &&
-                        <IconButton
-                        icon={cancel}
-                        onClick={() => handleClick('cancel')}
-                        />}
+                        { showFinalOptions() && <IconButton icon={edit} onClick={() => onControlClick('edit')}/>}
+                        { showFinalOptions() && <IconButton icon={remove} onClick={() => onControlClick('delete')}/>}
+                        { showFinalOptions() && <ViewDebtor view={'view'} onControlClick={onControlClick} handleClose={handleCloseViewDebtor} handleOpen={handleOpenViewDebtor}/>}
+                        { hideControls() && <IconButton icon={save} onClick={handleSave}/>}
+                        { hideControls() && <IconButton icon={cancel} onClick={() => handleClick('cancel')}/>}
 
                     </div>
                 </td>
