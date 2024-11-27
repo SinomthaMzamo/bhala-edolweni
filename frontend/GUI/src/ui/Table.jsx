@@ -6,6 +6,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddForm from './AddForm';
+import MUIForm from './MUIForm';
+import SearchAppBar from './ToolBar';
+import '../table.css'
 
 const Table = () => {
     const [allDebtors, setAllDebtors] = useState([]);
@@ -101,9 +104,10 @@ const Table = () => {
     return ( 
         <>
             <div>
-                <table className="table table-hover caption-top">
+                <SearchAppBar/>
+                <table className="table table-hover caption-top fixed">
                     <caption>
-                        <h2>Total: ZAR {totalAmount}.00</h2>
+                        <h2 style={{marginTop:'3em', marginBottom: '0.5em'}}>Total: ZAR {totalAmount}.00</h2>
                         {/* <i className="fa fa-plus-square fa-2x" aria-hidden="true"></i> */}
                         <Button variant='contained' onClick={handleOpen}>Add new</Button>
                         <Modal
@@ -114,22 +118,22 @@ const Table = () => {
                         >
                             <Box sx={style}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Text in a modal
+                                Add a new debtor
                             </Typography>
                             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                                Be sure to use a unique name. 
                             </Typography>
-                            <AddForm/>
+                            <MUIForm/>
                             </Box>
                         </Modal>
                     </caption>
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Date</th>
-                            <th scope="col"></th>
+                            <th style={{ width: '5%' }}>#</th>
+                            <th style={{ width: '20%', textAlign: 'left' }}>Name</th>
+                            <th style={{ width: '20%', textAlign: 'right' }}>Amount</th>
+                            <th style={{ width: '25%', textAlign: 'center' }}>Date</th>
+                            <th style={{ width: '25%' }}></th>
                         </tr>
                     </thead>
                     <tbody>

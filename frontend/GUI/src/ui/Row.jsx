@@ -233,6 +233,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
     const NameInputField = () => {
         return ( 
             <input
+            style={{width:'100%'}}
             ref={nameInputRef} 
             type='text' 
             defaultValue={nameState} 
@@ -244,6 +245,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
     const AmountInputField = () => {
         return(
             <input
+            style={{width:'100%'}}
             ref={amountInputRef} 
             type="number" 
             min='0' 
@@ -272,13 +274,13 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
                     <td><NameInputField/></td>
                     
                 ) : (
-                    <td>{toTitle(name)}</td>
+                    <td style={{textAlign:'left'}}>{toTitle(name)}</td>
                 )}
                 
                 {state.isEditing ? (
                     <td><AmountInputField/></td>  
                 ) : (
-                    <td>R {amount}.00</td>
+                    <td style={{textAlign:'right'}}>R {amount}.00</td>
                 )}
                 
                 <td>{date}</td>
