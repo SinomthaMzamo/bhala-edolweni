@@ -16,8 +16,9 @@ export default function MUIForm() {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!name) newErrors.name = 'Name is required';
-        if (!amount || isNaN(amount)) newErrors.amount = 'Valid amount is required';
+        if (!name) newErrors.name = 'Name is required*';
+        if (!amount || isNaN(amount)) newErrors.amount = 'Valid amount is required*';
+        setFeedback("There are some invalid inputs. ");
         return newErrors;
     };
 
@@ -63,11 +64,18 @@ export default function MUIForm() {
         autoComplete="off"
         onSubmit={sendNewDebtorInfo}
       >
-        <TextField id="standard-basic" label="Name" variant="standard" onChange={handleNameInput} />
+        <TextField id="standard-basic" sx={{}} label="Name" variant="standard" onChange={handleNameInput} />
+        {errors.name && <div style={{marginTop:'0', fontSize:'0.7em', color:'brown'}}>{errors.name}</div>}
         <TextField id="standard-basic" label="Amount" variant="standard" onChange={handleAmountInput}/>
+        {errors.amount && <div style={{marginTop:'0', fontSize:'0.7em', color:'brown'}}>{errors.amount}</div>}
         <Button variant="contained" disableElevation type="submit">
         ADD NEW DEBTOR
         </Button>
+        {feedback && ( // Conditionally render the feedback message
+                <div className="pacifico-regular feedback " style={{ marginTop: '10px', border: '2px solid darkgrey', background: 'white', padding: '2px' }}>
+                    {feedback}
+                </div>
+            )}
       </Box>
     );
   }
