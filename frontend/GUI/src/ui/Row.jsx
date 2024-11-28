@@ -152,6 +152,7 @@ const Row = ({debtor, number, onUpdate, onFocus, onDelete}) => {
             }
         }).then(response => {
             console.log(response.data);
+            onUpdate();
         }).catch(error => {
             console.error('There was an error updating the debtor', error);
         });
