@@ -102,7 +102,7 @@ $ python bhala.py "debtor3-8"
    - **`edolweni.db`**: This is the database file, SQLite in this case. It stores your application’s data (e.g., user information).
 
 4. **`main.py`**  
-   The entry point of the application. It typically initializes the web framework (like Flask), configures routes, and starts the development server. In many cases, this file will import from `app/routes.py` to link URL routes to the application logic.
+   The entry point of the application. This starts up the backend server.
 
 ---
 
